@@ -1,0 +1,2561 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Proposta de Locação - Nova Progresso</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5.1.1/400.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5.1.1/500.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5.1.1/600.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/inter@5.1.1/700.css" />
+  <style>
+    :root {
+      --primary: #0a1e3d;
+      --primary-light: #142d54;
+      --gold: #c9a84c;
+      --gold-light: #d4b96a;
+      --gold-dark: #b8953f;
+      --success: #10b981;
+      --danger: #ef4444;
+      --gray-50: #f9fafb;
+      --gray-100: #f3f4f6;
+      --gray-200: #e5e7eb;
+      --gray-300: #d1d5db;
+      --gray-400: #9ca3af;
+      --gray-500: #6b7280;
+      --gray-600: #4b5563;
+      --gray-700: #374151;
+      --gray-800: #1f2937;
+      --gray-900: #111827;
+      --radius: 12px;
+      --shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1);
+      --shadow-xl: 0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%);
+      min-height: 100vh;
+      color: var(--gray-800);
+    }
+
+    .app-header {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      padding: 1.5rem 2rem;
+      box-shadow: var(--shadow-lg);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-content {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .logo-area img {
+      height: 50px;
+      border-radius: 8px;
+    }
+
+    .logo-text h1 {
+      color: #fff;
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    .logo-text p {
+      color: var(--gold-light);
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+
+    .header-badge {
+      background: var(--gold);
+      color: var(--primary);
+      padding: 0.5rem 1.25rem;
+      border-radius: 50px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .main-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 4rem;
+    }
+
+    .progress-container {
+      background: #fff;
+      border-radius: var(--radius);
+      padding: 1.5rem 2rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow);
+    }
+
+    .progress-steps {
+      display: flex;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    .progress-steps::before {
+      content: '';
+      position: absolute;
+      top: 20px;
+      left: 40px;
+      right: 40px;
+      height: 3px;
+      background: var(--gray-200);
+      z-index: 1;
+    }
+
+    .progress-line {
+      position: absolute;
+      top: 20px;
+      left: 40px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--gold), var(--gold-light));
+      z-index: 2;
+      transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+      border-radius: 2px;
+    }
+
+    .progress-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      z-index: 3;
+      cursor: pointer;
+    }
+
+    .step-circle {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--gray-200);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--gray-500);
+      transition: all 0.3s;
+      margin-bottom: 0.5rem;
+    }
+
+    .progress-step.active .step-circle {
+      background: linear-gradient(135deg, var(--gold), var(--gold-light));
+      color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(201, 168, 76, 0.25);
+    }
+
+    .progress-step.completed .step-circle {
+      background: var(--success);
+      color: #fff;
+    }
+
+    .step-label {
+      font-size: 0.7rem;
+      color: var(--gray-400);
+      text-align: center;
+      font-weight: 500;
+      max-width: 80px;
+      transition: color 0.3s;
+    }
+
+    .progress-step.active .step-label {
+      color: var(--gold-dark);
+      font-weight: 600;
+    }
+
+    .progress-step.completed .step-label {
+      color: var(--success);
+    }
+
+    .form-card {
+      background: #fff;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+    }
+
+    .form-section {
+      display: none;
+      padding: 2rem 2.5rem;
+      animation: fadeIn 0.4s ease;
+    }
+
+    .form-section.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid var(--gray-100);
+    }
+
+    .section-icon {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .section-icon svg {
+      width: 24px;
+      height: 24px;
+      fill: none;
+      stroke: var(--gold);
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .section-title h2 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--gray-900);
+    }
+
+    .section-title p {
+      font-size: 0.85rem;
+      color: var(--gray-500);
+      margin-top: 0.2rem;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group.full-width {
+      grid-column: 1 / -1;
+    }
+
+    .form-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--gray-700);
+      margin-bottom: 0.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .form-label .required {
+      color: var(--danger);
+    }
+
+    .form-input,
+    .form-select,
+    .form-textarea {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      padding: 0.7rem 1rem;
+      border: 2px solid var(--gray-200);
+      border-radius: 10px;
+      background: var(--gray-50);
+      color: var(--gray-800);
+      transition: all 0.25s;
+      outline: none;
+    }
+
+    .form-input:focus,
+    .form-select:focus,
+    .form-textarea:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 4px rgba(201, 168, 76, 0.15);
+      background: #fff;
+    }
+
+    .form-input.error,
+    .form-select.error {
+      border-color: var(--danger);
+      box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.1);
+    }
+
+    .form-input::placeholder {
+      color: var(--gray-400);
+    }
+
+    .form-select {
+      appearance: none;
+      background-image: url("image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      padding-right: 2.5rem;
+      cursor: pointer;
+    }
+
+    .form-textarea {
+      resize: vertical;
+      min-height: 100px;
+      line-height: 1.5;
+    }
+
+    .error-message {
+      font-size: 0.75rem;
+      color: var(--danger);
+      margin-top: 0.3rem;
+      display: none;
+    }
+
+    .error-message.show {
+      display: block;
+    }
+
+    .section-divider {
+      margin: 2rem 0 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .section-divider span {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--primary);
+      white-space: nowrap;
+      background: linear-gradient(135deg, rgba(10, 30, 61, 0.08), rgba(20, 45, 84, 0.04));
+      padding: 0.4rem 1rem;
+      border-radius: 8px;
+      border-left: 3px solid var(--gold);
+    }
+
+    .section-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--gray-200);
+    }
+
+    .upload-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .upload-card {
+      border: 2px solid var(--gray-200);
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: #fff;
+      transition: border-color 0.3s;
+    }
+
+    .upload-card:hover {
+      border-color: var(--gold);
+    }
+
+    .upload-card-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 1rem 1.25rem;
+      background: var(--gray-50);
+      border-bottom: 1px solid var(--gray-200);
+    }
+
+    .upload-card-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .upload-card-icon--rg { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+    .upload-card-icon--cpf { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
+    .upload-card-icon--renda { background: linear-gradient(135deg, #10b981, #059669); }
+    .upload-card-icon--extrato { background: linear-gradient(135deg, #f59e0b, #d97706); }
+    .upload-card-icon--ir { background: linear-gradient(135deg, #ef4444, #dc2626); }
+    .upload-card-icon--outros { background: linear-gradient(135deg, #6b7280, #4b5563); }
+
+    .upload-card-icon svg {
+      width: 20px;
+      height: 20px;
+      fill: none;
+      stroke: #fff;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .upload-card-header h4 {
+      font-size: 0.9rem;
+      color: var(--gray-800);
+      font-weight: 600;
+    }
+
+    .upload-card-header p {
+      font-size: 0.7rem;
+      color: var(--gray-400);
+      margin-top: 0.1rem;
+    }
+
+    .upload-card-body {
+      padding: 1.25rem;
+    }
+
+    .upload-area {
+      border: 2px dashed var(--gray-300);
+      border-radius: 10px;
+      padding: 1.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      background: var(--gray-50);
+    }
+
+    .upload-area:hover {
+      border-color: var(--gold);
+      background: rgba(201, 168, 76, 0.05);
+    }
+
+    .upload-area.dragover {
+      border-color: var(--gold);
+      background: rgba(201, 168, 76, 0.1);
+    }
+
+    .upload-area-icon {
+      width: 40px;
+      height: 40px;
+      margin: 0 auto 0.75rem;
+      background: var(--gray-200);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .upload-area-icon svg {
+      width: 20px;
+      height: 20px;
+      fill: none;
+      stroke: var(--gray-500);
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .upload-area h5 {
+      font-size: 0.85rem;
+      color: var(--gray-600);
+      margin-bottom: 0.2rem;
+    }
+
+    .upload-area p {
+      font-size: 0.75rem;
+      color: var(--gray-400);
+    }
+
+    .upload-area .browse-link {
+      color: var(--gold-dark);
+      font-weight: 600;
+      text-decoration: underline;
+    }
+
+    .file-list {
+      margin-top: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .file-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--gray-50);
+      border: 1px solid var(--gray-200);
+      border-radius: 8px;
+      padding: 0.5rem 0.75rem;
+      font-size: 0.8rem;
+      color: var(--gray-700);
+      animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(-10px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .file-item .file-name {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      overflow: hidden;
+    }
+
+    .file-item .file-name span {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 180px;
+    }
+
+    .file-item .file-size {
+      color: var(--gray-400);
+      font-size: 0.7rem;
+      white-space: nowrap;
+    }
+
+    .file-item .remove-file {
+      background: none;
+      border: none;
+      color: var(--danger);
+      cursor: pointer;
+      font-size: 1rem;
+      padding: 0.2rem;
+      transition: transform 0.2s;
+      flex-shrink: 0;
+    }
+
+    .file-item .remove-file:hover {
+      transform: scale(1.2);
+    }
+
+    .file-count {
+      font-size: 0.7rem;
+      color: var(--gold-dark);
+      font-weight: 600;
+      background: rgba(201, 168, 76, 0.1);
+      padding: 0.15rem 0.5rem;
+      border-radius: 50px;
+    }
+
+    .signature-container {
+      border: 2px solid var(--gray-200);
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .signature-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem 1rem;
+      background: var(--gray-50);
+      border-bottom: 1px solid var(--gray-200);
+    }
+
+    .signature-header span {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--gray-600);
+    }
+
+    .clear-signature {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--danger);
+      background: none;
+      border: 1px solid var(--danger);
+      border-radius: 6px;
+      padding: 0.3rem 0.8rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .clear-signature:hover {
+      background: var(--danger);
+      color: #fff;
+    }
+
+    #signaturePad {
+      width: 100%;
+      height: 200px;
+      cursor: crosshair;
+      touch-action: none;
+    }
+
+    .signature-note {
+      font-size: 0.75rem;
+      color: var(--gray-400);
+      margin-top: 0.5rem;
+      font-style: italic;
+    }
+
+    .terms-check {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+      padding: 1rem;
+      background: var(--gray-50);
+      border-radius: 10px;
+      border: 1px solid var(--gray-200);
+    }
+
+    .terms-check input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      margin-top: 2px;
+      accent-color: var(--gold);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .terms-check label {
+      font-size: 0.85rem;
+      color: var(--gray-600);
+      line-height: 1.5;
+      cursor: pointer;
+    }
+
+    .terms-check label a {
+      color: var(--gold-dark);
+      font-weight: 600;
+    }
+
+    .form-actions {
+      display: flex;
+      justify-content: space-between;
+      padding: 1.5rem 2.5rem;
+      background: var(--gray-50);
+      border-top: 1px solid var(--gray-200);
+    }
+
+    .btn {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      padding: 0.75rem 2rem;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.25s;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn:active {
+      transform: scale(0.97);
+    }
+
+    .btn--back {
+      background: var(--gray-200);
+      color: var(--gray-700);
+    }
+
+    .btn--back:hover {
+      background: var(--gray-300);
+    }
+
+    .btn--next {
+      background: linear-gradient(135deg, var(--gold), var(--gold-light));
+      color: var(--primary);
+      box-shadow: 0 4px 12px rgba(201, 168, 76, 0.35);
+    }
+
+    .btn--next:hover {
+      box-shadow: 0 6px 18px rgba(201, 168, 76, 0.5);
+      transform: translateY(-1px);
+    }
+
+    .btn--submit {
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(10, 30, 61, 0.35);
+    }
+
+    .btn--submit:hover {
+      box-shadow: 0 6px 18px rgba(10, 30, 61, 0.5);
+      transform: translateY(-1px);
+    }
+
+    .btn svg {
+      width: 18px;
+      height: 18px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+
+    .success-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 30, 61, 0.6);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 1rem;
+    }
+
+    .success-modal.active {
+      display: flex;
+    }
+
+    .success-card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 3rem 2.5rem;
+      text-align: center;
+      max-width: 480px;
+      width: 100%;
+      box-shadow: var(--shadow-xl);
+      animation: popIn 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .success-icon {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, var(--success), #059669);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+    }
+
+    .success-icon svg {
+      width: 40px;
+      height: 40px;
+      fill: none;
+      stroke: #fff;
+      stroke-width: 3;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-dasharray: 60;
+      stroke-dashoffset: 60;
+    }
+
+    .success-modal.active .success-icon svg {
+      animation: drawCheck 0.5s ease 0.3s forwards;
+    }
+
+    @keyframes drawCheck {
+      to { stroke-dashoffset: 0; }
+    }
+
+    .success-card h2 {
+      font-size: 1.5rem;
+      color: var(--gray-900);
+      margin-bottom: 0.5rem;
+    }
+
+    .success-card p {
+      font-size: 0.95rem;
+      color: var(--gray-500);
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+
+    .success-card .btn {
+      margin: 0 auto;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    .summary-block {
+      background: var(--gray-50);
+      border-radius: 10px;
+      padding: 1.25rem;
+      border: 1px solid var(--gray-200);
+    }
+
+    .summary-block h4 {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .summary-block h4 .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--gold);
+    }
+
+    .summary-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.35rem 0;
+      font-size: 0.8rem;
+      border-bottom: 1px solid var(--gray-100);
+    }
+
+    .summary-item:last-child {
+      border-bottom: none;
+    }
+
+    .summary-item .label {
+      color: var(--gray-500);
+    }
+
+    .summary-item .value {
+      color: var(--gray-800);
+      font-weight: 600;
+      text-align: right;
+      max-width: 60%;
+      word-break: break-word;
+    }
+
+    .toggle-section {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      padding: 1rem;
+      background: var(--gray-50);
+      border-radius: 10px;
+      border: 1px solid var(--gray-200);
+    }
+
+    .toggle-switch {
+      position: relative;
+      width: 48px;
+      height: 26px;
+      flex-shrink: 0;
+    }
+
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .toggle-slider {
+      position: absolute;
+      inset: 0;
+      background: var(--gray-300);
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .toggle-slider::before {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      left: 3px;
+      top: 3px;
+      background: #fff;
+      border-radius: 50%;
+      transition: all 0.3s;
+    }
+
+    .toggle-switch input:checked + .toggle-slider {
+      background: var(--gold);
+    }
+
+    .toggle-switch input:checked + .toggle-slider::before {
+      transform: translateX(22px);
+    }
+
+    .toggle-label h4 {
+      font-size: 0.9rem;
+      color: var(--gray-700);
+    }
+
+    .toggle-label p {
+      font-size: 0.75rem;
+      color: var(--gray-400);
+    }
+
+    .hidden-fields {
+      display: none;
+    }
+
+    .hidden-fields.show {
+      display: block;
+    }
+
+    .doc-checklist {
+      background: var(--gray-50);
+      border-radius: 10px;
+      padding: 1.25rem;
+      border: 1px solid var(--gray-200);
+      margin-bottom: 1.5rem;
+    }
+
+    .doc-checklist h4 {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .doc-checklist h4 svg {
+      width: 18px;
+      height: 18px;
+      fill: none;
+      stroke: var(--gold);
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .doc-checklist ul {
+      list-style: none;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 0.5rem;
+    }
+
+    .doc-checklist li {
+      font-size: 0.8rem;
+      color: var(--gray-600);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .doc-checklist li::before {
+      content: '✓';
+      color: var(--success);
+      font-weight: 700;
+    }
+
+    /* Additional pretenders */
+    .pretender-block {
+      border: 2px solid var(--gray-200);
+      border-radius: var(--radius);
+      margin-bottom: 1.5rem;
+      overflow: hidden;
+      transition: border-color 0.3s;
+    }
+
+    .pretender-block:hover {
+      border-color: var(--gold);
+    }
+
+    .pretender-block-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 1.25rem;
+      background: linear-gradient(135deg, rgba(10, 30, 61, 0.05), rgba(20, 45, 84, 0.03));
+      border-bottom: 1px solid var(--gray-200);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .pretender-block-header h4 {
+      font-size: 0.9rem;
+      color: var(--primary);
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .pretender-block-header .pretender-badge {
+      background: var(--gold);
+      color: var(--primary);
+      padding: 0.15rem 0.6rem;
+      border-radius: 50px;
+      font-size: 0.7rem;
+      font-weight: 700;
+    }
+
+    .pretender-block-header .toggle-arrow {
+      font-size: 1.2rem;
+      color: var(--gray-400);
+      transition: transform 0.3s;
+    }
+
+    .pretender-block-header.open .toggle-arrow {
+      transform: rotate(180deg);
+    }
+
+    .pretender-block-body {
+      display: none;
+      padding: 1.5rem 1.25rem;
+    }
+
+    .pretender-block-body.open {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .add-pretender-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      width: 100%;
+      padding: 1rem;
+      border: 2px dashed var(--gray-300);
+      border-radius: var(--radius);
+      background: var(--gray-50);
+      color: var(--gray-500);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin-top: 0.5rem;
+    }
+
+    .add-pretender-btn:hover {
+      border-color: var(--gold);
+      color: var(--gold-dark);
+      background: rgba(201, 168, 76, 0.05);
+    }
+
+    .add-pretender-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      border-color: var(--gray-200);
+      color: var(--gray-400);
+    }
+
+    .add-pretender-btn:hover:disabled {
+      background: var(--gray-50);
+      color: var(--gray-400);
+    }
+
+    .add-pretender-btn svg {
+      width: 20px;
+      height: 20px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .pretender-counter {
+      font-size: 0.8rem;
+      color: var(--gray-500);
+      text-align: center;
+      margin-top: 0.5rem;
+    }
+
+    .file-type-badge {
+      font-size: 0.6rem;
+      font-weight: 700;
+      padding: 0.1rem 0.4rem;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+
+    .file-type-badge--pdf { background: #fee2e2; color: #dc2626; }
+    .file-type-badge--img { background: #dbeafe; color: #2563eb; }
+    .file-type-badge--doc { background: #d1fae5; color: #059669; }
+
+    @media (max-width: 768px) {
+      .main-container { padding: 1rem 0.75rem 3rem; }
+      .form-section { padding: 1.5rem 1.25rem; }
+      .form-actions { padding: 1.25rem; }
+      .form-grid { grid-template-columns: 1fr; }
+      .upload-grid { grid-template-columns: 1fr; }
+      .progress-steps { overflow-x: auto; padding-bottom: 0.5rem; }
+      .step-label { font-size: 0.6rem; max-width: 60px; }
+      .step-circle { width: 32px; height: 32px; font-size: 0.75rem; }
+      .summary-grid { grid-template-columns: 1fr; }
+      .form-actions { flex-direction: column-reverse; gap: 0.75rem; }
+      .btn { justify-content: center; width: 100%; }
+      .header-content { justify-content: center; text-align: center; }
+    }
+
+    .spinner {
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="app-header">
+    <div class="header-content">
+      <div class="logo-area">
+        <img src="https://image.qwenlm.ai/public_source/82ad31f9-2fe2-4117-9b2b-1733be0e1736/134652a0c-c035-4792-a77c-2032c0ec21c6.png" alt="Nova Progresso">
+        <div class="logo-text">
+          <h1>NOVA PROGRESSO</h1>
+          <p>Proposta de Locação de Imóvel</p>
+        </div>
+      </div>
+      <div class="header-badge">Formulário Eletrônico</div>
+    </div>
+  </header>
+
+  <div class="main-container">
+    <!-- Progress Bar -->
+    <div class="progress-container">
+      <div class="progress-steps">
+        <div class="progress-line" id="progressLine" style="width: 0%"></div>
+        <div class="progress-step active" data-step="1">
+          <div class="step-circle">1</div>
+          <span class="step-label">Imóvel</span>
+        </div>
+        <div class="progress-step" data-step="2">
+          <div class="step-circle">2</div>
+          <span class="step-label">Pretendentes</span>
+        </div>
+        <div class="progress-step" data-step="3">
+          <div class="step-circle">3</div>
+          <span class="step-label">Fiador</span>
+        </div>
+        <div class="progress-step" data-step="4">
+          <div class="step-circle">4</div>
+          <span class="step-label">Condições</span>
+        </div>
+        <div class="progress-step" data-step="5">
+          <div class="step-circle">5</div>
+          <span class="step-label">Documentos</span>
+        </div>
+        <div class="progress-step" data-step="6">
+          <div class="step-circle">6</div>
+          <span class="step-label">Assinatura</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Form Card -->
+    <div class="form-card">
+      <form id="rentalForm">
+
+        <!-- Step 1: Property Data -->
+        <div class="form-section active" id="step1">
+          <div class="section-header">
+            <div class="section-icon">
+              <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            </div>
+            <div class="section-title">
+              <h2>Dados do Imóvel</h2>
+              <p>Informações sobre a unidade a ser locada</p>
+            </div>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">Edifício / Unidade <span class="required">*</span></label>
+              <input type="text" class="form-input" id="edificio" name="edificio" placeholder="Ex: Edifício Solar das Flores, Apt 302" required>
+              <span class="error-message" id="error-edificio">Campo obrigatório</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Endereço <span class="required">*</span></label>
+              <input type="text" class="form-input" id="enderecoImovel" name="enderecoImovel" placeholder="Rua, Avenida, etc." required>
+              <span class="error-message" id="error-enderecoImovel">Campo obrigatório</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Número <span class="required">*</span></label>
+              <input type="text" class="form-input" id="numeroImovel" name="numeroImovel" placeholder="Nº" required>
+              <span class="error-message" id="error-numeroImovel">Campo obrigatório</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Bairro <span class="required">*</span></label>
+              <input type="text" class="form-input" id="bairroImovel" name="bairroImovel" placeholder="Bairro" required>
+              <span class="error-message" id="error-bairroImovel">Campo obrigatório</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Cidade <span class="required">*</span></label>
+              <input type="text" class="form-input" id="cidadeImovel" name="cidadeImovel" placeholder="Cidade" required>
+              <span class="error-message" id="error-cidadeImovel">Campo obrigatório</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">U.F. <span class="required">*</span></label>
+              <select class="form-select" id="ufImovel" name="ufImovel" required>
+                <option value="" disabled selected>Selecione</option>
+                <option value="AC">AC</option><option value="AL">AL</option><option value="AP">AP</option>
+                <option value="AM">AM</option><option value="BA">BA</option><option value="CE">CE</option>
+                <option value="DF">DF</option><option value="ES">ES</option><option value="GO">GO</option>
+                <option value="MA">MA</option><option value="MT">MT</option><option value="MS">MS</option>
+                <option value="MG">MG</option><option value="PA">PA</option><option value="PB">PB</option>
+                <option value="PR">PR</option><option value="PE">PE</option><option value="PI">PI</option>
+                <option value="RJ">RJ</option><option value="RN">RN</option><option value="RS">RS</option>
+                <option value="RO">RO</option><option value="RR">RR</option><option value="SC">SC</option>
+                <option value="SP">SP</option><option value="SE">SE</option><option value="TO">TO</option>
+              </select>
+              <span class="error-message" id="error-ufImovel">Campo obrigatório</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 2: Pretenders -->
+        <div class="form-section" id="step2">
+          <div class="section-header">
+            <div class="section-icon">
+              <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <div class="section-title">
+              <h2>Dados dos Pretendentes</h2>
+              <p>Informações dos locatários (até 5 pretendentes)</p>
+            </div>
+          </div>
+
+          <!-- Pretender 1 (Main) -->
+          <div class="pretender-block" id="pretenderBlock1">
+            <div class="pretender-block-header open" onclick="togglePretenderBlock(1)">
+              <h4>
+                <span class="pretender-badge">Pretendente 1</span>
+                <span>Pretendente Principal</span>
+              </h4>
+              <span class="toggle-arrow">▼</span>
+            </div>
+            <div class="pretender-block-body open" id="pretenderBody1">
+              <div class="form-grid">
+                <div class="form-group full-width">
+                  <label class="form-label">Nome Completo <span class="required">*</span></label>
+                  <input type="text" class="form-input" id="nomePretendente" name="nomePretendente" placeholder="Nome completo" required>
+                  <span class="error-message" id="error-nomePretendente">Campo obrigatório</span>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">E-mail <span class="required">*</span></label>
+                  <input type="email" class="form-input" id="emailPretendente" name="emailPretendente" placeholder="seu@email.com" required>
+                  <span class="error-message" id="error-emailPretendente">E-mail inválido</span>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">CPF <span class="required">*</span></label>
+                  <input type="text" class="form-input" id="cpfPretendente" name="cpfPretendente" placeholder="000.000.000-00" maxlength="14" required>
+                  <span class="error-message" id="error-cpfPretendente">CPF inválido</span>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Identidade Nº <span class="required">*</span></label>
+                  <input type="text" class="form-input" id="rgPretendente" name="rgPretendente" placeholder="Nº do RG" required>
+                  <span class="error-message" id="error-rgPretendente">Campo obrigatório</span>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Emitido por</label>
+                  <input type="text" class="form-input" id="emissorPretendente" name="emissorPretendente" placeholder="Ex: SSP/SP">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Data de Nascimento <span class="required">*</span></label>
+                  <input type="date" class="form-input" id="nascPretendente" name="nascPretendente" required>
+                  <span class="error-message" id="error-nascPretendente">Campo obrigatório</span>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Profissão <span class="required">*</span></label>
+                  <input type="text" class="form-input" id="profissaoPretendente" name="profissaoPretendente" placeholder="Sua profissão" required>
+                  <span class="error-message" id="error-profissaoPretendente">Campo obrigatório</span>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Naturalidade</label>
+                  <input type="text" class="form-input" id="naturalidadePretendente" name="naturalidadePretendente" placeholder="Cidade de nascimento">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Estado Civil <span class="required">*</span></label>
+                  <select class="form-select" id="civilPretendente" name="civilPretendente" required>
+                    <option value="" disabled selected>Selecione</option>
+                    <option value="solteiro">Solteiro(a)</option>
+                    <option value="casado">Casado(a)</option>
+                    <option value="divorciado">Divorciado(a)</option>
+                    <option value="viuvo">Viúvo(a)</option>
+                    <option value="separado">Separado(a)</option>
+                  </select>
+                  <span class="error-message" id="error-civilPretendente">Campo obrigatório</span>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Tel. Comercial</label>
+                  <input type="tel" class="form-input" id="telComPretendente" name="telComPretendente" placeholder="(00) 0000-0000" maxlength="14">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Tel. Residencial</label>
+                  <input type="tel" class="form-input" id="telResPretendente" name="telResPretendente" placeholder="(00) 0000-0000" maxlength="14">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Celular <span class="required">*</span></label>
+                  <input type="tel" class="form-input" id="celPretendente" name="celPretendente" placeholder="(00) 00000-0000" maxlength="15" required>
+                  <span class="error-message" id="error-celPretendente">Campo obrigatório</span>
+                </div>
+              </div>
+
+              <div class="section-divider">
+                <span>Endereço do Pretendente 1</span>
+              </div>
+
+              <div class="form-grid">
+                <div class="form-group full-width">
+                  <label class="form-label">Endereço <span class="required">*</span></label>
+                  <input type="text" class="form-input" id="enderecoPretendente" name="enderecoPretendente" placeholder="Rua, Avenida, etc." required>
+                  <span class="error-message" id="error-enderecoPretendente">Campo obrigatório</span>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Número <span class="required">*</span></label>
+                  <input type="text" class="form-input" id="numeroPretendente" name="numeroPretendente" placeholder="Nº" required>
+                  <span class="error-message" id="error-numeroPretendente">Campo obrigatório</span>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Bairro <span class="required">*</span></label>
+                  <input type="text" class="form-input" id="bairroPretendente" name="bairroPretendente" placeholder="Bairro" required>
+                  <span class="error-message" id="error-bairroPretendente">Campo obrigatório</span>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Cidade <span class="required">*</span></label>
+                  <input type="text" class="form-input" id="cidadePretendente" name="cidadePretendente" placeholder="Cidade" required>
+                  <span class="error-message" id="error-cidadePretendente">Campo obrigatório</span>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">U.F. <span class="required">*</span></label>
+                  <select class="form-select" id="ufPretendente" name="ufPretendente" required>
+                    <option value="" disabled selected>Selecione</option>
+                    <option value="AC">AC</option><option value="AL">AL</option><option value="AP">AP</option>
+                    <option value="AM">AM</option><option value="BA">BA</option><option value="CE">CE</option>
+                    <option value="DF">DF</option><option value="ES">ES</option><option value="GO">GO</option>
+                    <option value="MA">MA</option><option value="MT">MT</option><option value="MS">MS</option>
+                    <option value="MG">MG</option><option value="PA">PA</option><option value="PB">PB</option>
+                    <option value="PR">PR</option><option value="PE">PE</option><option value="PI">PI</option>
+                    <option value="RJ">RJ</option><option value="RN">RN</option><option value="RS">RS</option>
+                    <option value="RO">RO</option><option value="RR">RR</option><option value="SC">SC</option>
+                    <option value="SP">SP</option><option value="SE">SE</option><option value="TO">TO</option>
+                  </select>
+                  <span class="error-message" id="error-ufPretendente">Campo obrigatório</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Additional Pretenders Container -->
+          <div id="additionalPretenders"></div>
+
+          <!-- Add Pretender Button -->
+          <button type="button" class="add-pretender-btn" id="addPretenderBtn" onclick="addPretender()">
+            <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Adicionar Pretendente
+          </button>
+          <p class="pretender-counter" id="pretenderCounter"></p>
+        </div>
+
+        <!-- Step 3: Fiador -->
+        <div class="form-section" id="step3">
+          <div class="section-header">
+            <div class="section-icon">
+              <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <div class="section-title">
+              <h2>Dados do Fiador</h2>
+              <p>Informações pessoais do fiador (opcional)</p>
+            </div>
+          </div>
+
+          <div class="toggle-section" id="fiadorToggle">
+            <label class="toggle-switch">
+              <input type="checkbox" id="hasFiador">
+              <span class="toggle-slider"></span>
+            </label>
+            <div class="toggle-label">
+              <h4>Possui fiador?</h4>
+              <p>Ative para incluir os dados do fiador</p>
+            </div>
+          </div>
+
+          <div class="hidden-fields" id="fiadorFields">
+            <div class="form-grid">
+              <div class="form-group full-width">
+                <label class="form-label">Nome Completo do Fiador</label>
+                <input type="text" class="form-input" id="nomeFiador" name="nomeFiador" placeholder="Nome completo">
+              </div>
+              <div class="form-group">
+                <label class="form-label">E-mail</label>
+                <input type="email" class="form-input" id="emailFiador" name="emailFiador" placeholder="email@fiador.com">
+              </div>
+              <div class="form-group">
+                <label class="form-label">CPF</label>
+                <input type="text" class="form-input" id="cpfFiador" name="cpfFiador" placeholder="000.000.000-00" maxlength="14">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Identidade Nº</label>
+                <input type="text" class="form-input" id="rgFiador" name="rgFiador" placeholder="Nº do RG">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Emitido por</label>
+                <input type="text" class="form-input" id="emissorFiador" name="emissorFiador" placeholder="Ex: SSP/SP">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Data de Nascimento</label>
+                <input type="date" class="form-input" id="nascFiador" name="nascFiador">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Profissão</label>
+                <input type="text" class="form-input" id="profissaoFiador" name="profissaoFiador" placeholder="Profissão">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Naturalidade</label>
+                <input type="text" class="form-input" id="naturalidadeFiador" name="naturalidadeFiador" placeholder="Cidade de nascimento">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Estado Civil</label>
+                <select class="form-select" id="civilFiador" name="civilFiador">
+                  <option value="" disabled selected>Selecione</option>
+                  <option value="solteiro">Solteiro(a)</option>
+                  <option value="casado">Casado(a)</option>
+                  <option value="divorciado">Divorciado(a)</option>
+                  <option value="viuvo">Viúvo(a)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Tel. Comercial</label>
+                <input type="tel" class="form-input" id="telComFiador" name="telComFiador" placeholder="(00) 0000-0000" maxlength="14">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Tel. Residencial</label>
+                <input type="tel" class="form-input" id="telResFiador" name="telResFiador" placeholder="(00) 0000-0000" maxlength="14">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Celular</label>
+                <input type="tel" class="form-input" id="celFiador" name="celFiador" placeholder="(00) 00000-0000" maxlength="15">
+              </div>
+            </div>
+
+            <div class="section-divider">
+              <span>Endereço do Fiador</span>
+            </div>
+
+            <div class="form-grid">
+              <div class="form-group full-width">
+                <label class="form-label">Endereço</label>
+                <input type="text" class="form-input" id="enderecoFiador" name="enderecoFiador" placeholder="Rua, Avenida, etc.">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Número</label>
+                <input type="text" class="form-input" id="numeroFiador" name="numeroFiador" placeholder="Nº">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Bairro</label>
+                <input type="text" class="form-input" id="bairroFiador" name="bairroFiador" placeholder="Bairro">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Cidade</label>
+                <input type="text" class="form-input" id="cidadeFiador" name="cidadeFiador" placeholder="Cidade">
+              </div>
+              <div class="form-group">
+                <label class="form-label">U.F.</label>
+                <select class="form-select" id="ufFiador" name="ufFiador">
+                  <option value="" disabled selected>Selecione</option>
+                  <option value="AC">AC</option><option value="AL">AL</option><option value="AP">AP</option>
+                  <option value="AM">AM</option><option value="BA">BA</option><option value="CE">CE</option>
+                  <option value="DF">DF</option><option value="ES">ES</option><option value="GO">GO</option>
+                  <option value="MA">MA</option><option value="MT">MT</option><option value="MS">MS</option>
+                  <option value="MG">MG</option><option value="PA">PA</option><option value="PB">PB</option>
+                  <option value="PR">PR</option><option value="PE">PE</option><option value="PI">PI</option>
+                  <option value="RJ">RJ</option><option value="RN">RN</option><option value="RS">RS</option>
+                  <option value="RO">RO</option><option value="RR">RR</option><option value="SC">SC</option>
+                  <option value="SP">SP</option><option value="SE">SE</option><option value="TO">TO</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Guarantor Spouse -->
+            <div class="toggle-section" id="conjugeFiadorToggle">
+              <label class="toggle-switch">
+                <input type="checkbox" id="hasConjugeFiador">
+                <span class="toggle-slider"></span>
+              </label>
+              <div class="toggle-label">
+                <h4>Cônjuge do Fiador?</h4>
+                <p>Ative para incluir os dados do cônjuge do fiador</p>
+              </div>
+            </div>
+
+            <div class="hidden-fields" id="conjugeFiadorFields">
+              <div class="section-divider">
+                <span>Dados do Cônjuge do Fiador</span>
+              </div>
+              <div class="form-grid">
+                <div class="form-group full-width">
+                  <label class="form-label">Nome Completo</label>
+                  <input type="text" class="form-input" id="nomeConjugeFiador" name="nomeConjugeFiador" placeholder="Nome completo">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">CPF</label>
+                  <input type="text" class="form-input" id="cpfConjugeFiador" name="cpfConjugeFiador" placeholder="000.000.000-00" maxlength="14">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Identidade Nº</label>
+                  <input type="text" class="form-input" id="rgConjugeFiador" name="rgConjugeFiador" placeholder="Nº do RG">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Emitido por</label>
+                  <input type="text" class="form-input" id="emissorConjugeFiador" name="emissorConjugeFiador" placeholder="Ex: SSP/SP" value="SSP">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Data de Nascimento</label>
+                  <input type="date" class="form-input" id="nascConjugeFiador" name="nascConjugeFiador">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Profissão</label>
+                  <input type="text" class="form-input" id="profissaoConjugeFiador" name="profissaoConjugeFiador" placeholder="Profissão">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Naturalidade</label>
+                  <input type="text" class="form-input" id="naturalidadeConjugeFiador" name="naturalidadeConjugeFiador" placeholder="Cidade de nascimento">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Estado Civil</label>
+                  <select class="form-select" id="civilConjugeFiador" name="civilConjugeFiador">
+                    <option value="" disabled selected>Selecione</option>
+                    <option value="solteiro">Solteiro(a)</option>
+                    <option value="casado">Casado(a)</option>
+                    <option value="divorciado">Divorciado(a)</option>
+                    <option value="viuvo">Viúvo(a)</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Tel. Comercial</label>
+                  <input type="tel" class="form-input" id="telComConjugeFiador" name="telComConjugeFiador" placeholder="(00) 0000-0000" maxlength="14">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Tel. Residencial</label>
+                  <input type="tel" class="form-input" id="telResConjugeFiador" name="telResConjugeFiador" placeholder="(00) 0000-0000" maxlength="14">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Celular</label>
+                  <input type="tel" class="form-input" id="celConjugeFiador" name="celConjugeFiador" placeholder="(00) 00000-0000" maxlength="15">
+                </div>
+              </div>
+              <div class="section-divider">
+                <span>Endereço do Cônjuge do Fiador</span>
+              </div>
+              <div class="form-grid">
+                <div class="form-group full-width">
+                  <label class="form-label">Endereço</label>
+                  <input type="text" class="form-input" id="enderecoConjugeFiador" name="enderecoConjugeFiador" placeholder="Rua, Avenida, etc.">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Número</label>
+                  <input type="text" class="form-input" id="numeroConjugeFiador" name="numeroConjugeFiador" placeholder="Nº">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Bairro</label>
+                  <input type="text" class="form-input" id="bairroConjugeFiador" name="bairroConjugeFiador" placeholder="Bairro">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Cidade</label>
+                  <input type="text" class="form-input" id="cidadeConjugeFiador" name="cidadeConjugeFiador" placeholder="Cidade">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">U.F.</label>
+                  <select class="form-select" id="ufConjugeFiador" name="ufConjugeFiador">
+                    <option value="" disabled selected>Selecione</option>
+                    <option value="AC">AC</option><option value="AL">AL</option><option value="AP">AP</option>
+                    <option value="AM">AM</option><option value="BA">BA</option><option value="CE">CE</option>
+                    <option value="DF">DF</option><option value="ES">ES</option><option value="GO">GO</option>
+                    <option value="MA">MA</option><option value="MT">MT</option><option value="MS">MS</option>
+                    <option value="MG">MG</option><option value="PA">PA</option><option value="PB">PB</option>
+                    <option value="PR">PR</option><option value="PE">PE</option><option value="PI">PI</option>
+                    <option value="RJ">RJ</option><option value="RN">RN</option><option value="RS">RS</option>
+                    <option value="RO">RO</option><option value="RR">RR</option><option value="SC">SC</option>
+                    <option value="SP">SP</option><option value="SE">SE</option><option value="TO">TO</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 4: Proposal Conditions -->
+        <div class="form-section" id="step4">
+          <div class="section-header">
+            <div class="section-icon">
+              <svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+            </div>
+            <div class="section-title">
+              <h2>Condições da Proposta</h2>
+              <p>Valor e condições de locação propostas</p>
+            </div>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">Valor do Aluguel Proposto (R$) <span class="required">*</span></label>
+              <input type="text" class="form-input" id="valorAluguel" name="valorAluguel" placeholder="0.000,00" required>
+              <span class="error-message" id="error-valorAluguel">Campo obrigatório</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Prazo de Locação <span class="required">*</span></label>
+              <select class="form-select" id="prazoLocacao" name="prazoLocacao" required>
+                <option value="" disabled selected>Selecione</option>
+                <option value="12">12 meses</option>
+                <option value="18">18 meses</option>
+                <option value="24">24 meses</option>
+                <option value="30">30 meses</option>
+                <option value="36">36 meses</option>
+              </select>
+              <span class="error-message" id="error-prazoLocacao">Campo obrigatório</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Forma de Pagamento <span class="required">*</span></label>
+              <select class="form-select" id="formaPagamento" name="formaPagamento" required>
+                <option value="" disabled selected>Selecione</option>
+                <option value="mensal">Mensal</option>
+                <option value="bimestral">Bimestral</option>
+                <option value="trimestral">Trimestral</option>
+                <option value="semestral">Semestral</option>
+              </select>
+              <span class="error-message" id="error-formaPagamento">Campo obrigatório</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Dia do Vencimento</label>
+              <input type="number" class="form-input" id="diaVencimento" name="diaVencimento" placeholder="Ex: 10" min="1" max="31">
+            </div>
+            <div class="form-group full-width">
+              <label class="form-label">Observações / Condições Adicionais</label>
+              <textarea class="form-textarea" id="observacoes" name="observacoes" placeholder="Descreva condições adicionais, se houver..."></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 5: Document Upload -->
+        <div class="form-section" id="step5">
+          <div class="section-header">
+            <div class="section-icon">
+              <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            </div>
+            <div class="section-title">
+              <h2>Upload de Documentos</h2>
+              <p>Anexe os documentos necessários para análise da proposta</p>
+            </div>
+          </div>
+
+          <div class="doc-checklist">
+            <h4>
+              <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              Documentos Necessários
+            </h4>
+            <ul>
+              <li>RG / Identidade (frente e verso)</li>
+              <li>CPF</li>
+              <li>Comprovante de Renda (últimos 3 meses)</li>
+              <li>Extrato Bancário (últimos 3 meses)</li>
+              <li>Imposto de Renda (último exercício)</li>
+              <li>Outros documentos complementares</li>
+            </ul>
+          </div>
+
+          <div class="upload-grid">
+            <!-- RG -->
+            <div class="upload-card">
+              <div class="upload-card-header">
+                <div class="upload-card-icon upload-card-icon--rg">
+                  <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                </div>
+                <div>
+                  <h4>RG / Identidade</h4>
+                  <p>Frente e verso do documento</p>
+                </div>
+              </div>
+              <div class="upload-card-body">
+                <div class="upload-area" id="uploadRG">
+                  <div class="upload-area-icon">
+                    <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                  </div>
+                  <h5>Arraste ou <span class="browse-link">selecione</span></h5>
+                  <p>PDF, JPG ou PNG (máx. 10MB)</p>
+                  <input type="file" id="fileRG" name="fileRG" accept="image/*,.pdf" hidden multiple>
+                </div>
+                <div class="file-list" id="fileListRG"></div>
+              </div>
+            </div>
+
+            <!-- CPF -->
+            <div class="upload-card">
+              <div class="upload-card-header">
+                <div class="upload-card-icon upload-card-icon--cpf">
+                  <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                </div>
+                <div>
+                  <h4>CPF</h4>
+                  <p>Cartão ou comprovante do CPF</p>
+                </div>
+              </div>
+              <div class="upload-card-body">
+                <div class="upload-area" id="uploadCPF">
+                  <div class="upload-area-icon">
+                    <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                  </div>
+                  <h5>Arraste ou <span class="browse-link">selecione</span></h5>
+                  <p>PDF, JPG ou PNG (máx. 10MB)</p>
+                  <input type="file" id="fileCPF" name="fileCPF" accept="image/*,.pdf" hidden>
+                </div>
+                <div class="file-list" id="fileListCPF"></div>
+              </div>
+            </div>
+
+            <!-- Comprovante de Renda -->
+            <div class="upload-card">
+              <div class="upload-card-header">
+                <div class="upload-card-icon upload-card-icon--renda">
+                  <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                </div>
+                <div>
+                  <h4>Comprovante de Renda</h4>
+                  <p>Holerites, declaração ou contracheque</p>
+                </div>
+              </div>
+              <div class="upload-card-body">
+                <div class="upload-area" id="uploadRenda">
+                  <div class="upload-area-icon">
+                    <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                  </div>
+                  <h5>Arraste ou <span class="browse-link">selecione</span></h5>
+                  <p>PDF, JPG, PNG ou DOC (máx. 10MB)</p>
+                  <input type="file" id="fileRenda" name="fileRenda" accept="image/*,.pdf,.doc,.docx" hidden multiple>
+                </div>
+                <div class="file-list" id="fileListRenda"></div>
+              </div>
+            </div>
+
+            <!-- Extrato Bancário -->
+            <div class="upload-card">
+              <div class="upload-card-header">
+                <div class="upload-card-icon upload-card-icon--extrato">
+                  <svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                </div>
+                <div>
+                  <h4>Extrato Bancário</h4>
+                  <p>Últimos 3 meses de movimentação</p>
+                </div>
+              </div>
+              <div class="upload-card-body">
+                <div class="upload-area" id="uploadExtrato">
+                  <div class="upload-area-icon">
+                    <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                  </div>
+                  <h5>Arraste ou <span class="browse-link">selecione</span></h5>
+                  <p>PDF, JPG, PNG ou DOC (máx. 10MB)</p>
+                  <input type="file" id="fileExtrato" name="fileExtrato" accept="image/*,.pdf,.doc,.docx" hidden multiple>
+                </div>
+                <div class="file-list" id="fileListExtrato"></div>
+              </div>
+            </div>
+
+            <!-- Imposto de Renda -->
+            <div class="upload-card">
+              <div class="upload-card-header">
+                <div class="upload-card-icon upload-card-icon--ir">
+                  <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                </div>
+                <div>
+                  <h4>Imposto de Renda</h4>
+                  <p>Declaração do último exercício</p>
+                </div>
+              </div>
+              <div class="upload-card-body">
+                <div class="upload-area" id="uploadIR">
+                  <div class="upload-area-icon">
+                    <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                  </div>
+                  <h5>Arraste ou <span class="browse-link">selecione</span></h5>
+                  <p>PDF ou JPG (máx. 10MB)</p>
+                  <input type="file" id="fileIR" name="fileIR" accept="image/*,.pdf" hidden multiple>
+                </div>
+                <div class="file-list" id="fileListIR"></div>
+              </div>
+            </div>
+
+            <!-- Outros Documentos -->
+            <div class="upload-card">
+              <div class="upload-card-header">
+                <div class="upload-card-icon upload-card-icon--outros">
+                  <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                </div>
+                <div>
+                  <h4>Outros Documentos</h4>
+                  <p>Documentos complementares</p>
+                </div>
+              </div>
+              <div class="upload-card-body">
+                <div class="upload-area" id="uploadOutros">
+                  <div class="upload-area-icon">
+                    <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                  </div>
+                  <h5>Arraste ou <span class="browse-link">selecione</span></h5>
+                  <p>PDF, JPG, PNG, DOC ou DOCX (máx. 10MB)</p>
+                  <input type="file" id="fileOutros" name="fileOutros" accept="image/*,.pdf,.doc,.docx" hidden multiple>
+                </div>
+                <div class="file-list" id="fileListOutros"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 6: Electronic Signature -->
+        <div class="form-section" id="step6">
+          <div class="section-header">
+            <div class="section-icon">
+              <svg viewBox="0 0 24 24"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg>
+            </div>
+            <div class="section-title">
+              <h2>Assinatura Eletrônica</h2>
+              <p>Assine abaixo para validar a proposta</p>
+            </div>
+          </div>
+
+          <div style="margin-bottom:2rem;">
+            <h3 style="font-size:1rem; font-weight:700; color:var(--gray-800); margin-bottom:1rem;">Resumo da Proposta</h3>
+            <div class="summary-grid" id="summaryGrid"></div>
+          </div>
+
+          <div class="signature-container">
+            <div class="signature-header">
+              <span>Assinatura do Pretendente</span>
+              <button type="button" class="clear-signature" id="clearSignature">Limpar</button>
+            </div>
+            <canvas id="signaturePad"></canvas>
+          </div>
+          <p class="signature-note">Desenhe sua assinatura acima usando o mouse ou o dedo (em dispositivos touch)</p>
+
+          <div class="terms-check">
+            <input type="checkbox" id="agreeTerms" name="agreeTerms" required>
+            <label for="agreeTerms">
+              Declaro que todas as informações fornecidas são verdadeiras e autorizo a <strong>Nova Progresso</strong> a realizar as verificações necessárias. Concordo com os <a href="#">termos e condições</a> da proposta de locação e entendo que a aprovação está sujeita à análise documental e cadastral.
+            </label>
+          </div>
+          <span class="error-message" id="error-agreeTerms">É necessário aceitar os termos</span>
+        </div>
+
+        <!-- Navigation -->
+        <div class="form-actions">
+          <button type="button" class="btn btn--back" id="btnBack" style="display:none;">
+            <svg viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+            Anterior
+          </button>
+          <button type="button" class="btn btn--next" id="btnNext">
+            Próximo
+            <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </button>
+          <button type="submit" class="btn btn--submit" id="btnSubmit" style="display:none;">
+            <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            Enviar Proposta
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Success Modal -->
+  <div class="success-modal" id="successModal">
+    <div class="success-card">
+      <div class="success-icon">
+        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h2>Proposta Enviada com Sucesso!</h2>
+      <p>Sua proposta de locação foi encaminhada para o departamento jurídico da Nova Progresso. Entraremos em contato em até 24 horas úteis.</p>
+      <button type="button" class="btn btn--next" onclick="location.reload()">Nova Proposta</button>
+    </div>
+  </div>
+
+  <script>
+    let currentStep = 1;
+    const totalSteps = 6;
+    const uploadedFiles = {};
+    let pretenderCount = 1;
+    const maxPretenders = 5;
+
+    const form = document.getElementById('rentalForm');
+    const btnBack = document.getElementById('btnBack');
+    const btnNext = document.getElementById('btnNext');
+    const btnSubmit = document.getElementById('btnSubmit');
+    const progressLine = document.getElementById('progressLine');
+    const sections = document.querySelectorAll('.form-section');
+    const steps = document.querySelectorAll('.progress-step');
+
+    // Toggle handlers
+    document.getElementById('hasFiador').addEventListener('change', function() {
+      document.getElementById('fiadorFields').classList.toggle('show', this.checked);
+    });
+
+    document.getElementById('hasConjugeFiador').addEventListener('change', function() {
+      document.getElementById('conjugeFiadorFields').classList.toggle('show', this.checked);
+    });
+
+    // Input masks
+    function maskCPF(value) {
+      return value.replace(/\D/g, '')
+        .replace(/(\d{3})(\d)/, '$1.$2')
+        .replace(/(\d{3})(\d)/, '$1.$2')
+        .replace(/(\d{3})(\d{1,2})/, '$1-$2')
+        .replace(/(-\d{2})\d+?$/, '$1');
+    }
+
+    function maskPhone(value) {
+      const digits = value.replace(/\D/g, '');
+      if (digits.length <= 10) {
+        return digits.replace(/(\d{2})(\d)/, '($1) $2').replace(/(\d{4})(\d)/, '$1-$2').replace(/(-\d{4})\d+?$/, '$1');
+      }
+      return digits.replace(/(\d{2})(\d)/, '($1) $2').replace(/(\d{5})(\d)/, '$1-$2').replace(/(-\d{4})\d+?$/, '$1');
+    }
+
+    function maskCurrency(value) {
+      const digits = value.replace(/\D/g, '');
+      if (!digits) return '';
+      return (parseInt(digits, 10) / 100).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    document.querySelectorAll('input[name*="cpf"]').forEach(input => {
+      input.addEventListener('input', function() { this.value = maskCPF(this.value); });
+    });
+
+    document.querySelectorAll('input[type="tel"]').forEach(input => {
+      input.addEventListener('input', function() { this.value = maskPhone(this.value); });
+    });
+
+    document.getElementById('valorAluguel').addEventListener('input', function() {
+      this.value = maskCurrency(this.value);
+    });
+
+    // Validation
+    function validateStep(step) {
+      let isValid = true;
+      const section = document.getElementById('step' + step);
+      const requiredFields = section.querySelectorAll('[required]');
+
+      requiredFields.forEach(field => {
+        const errorEl = document.getElementById('error-' + field.id);
+        let fieldValid = true;
+
+        if (!field.value.trim()) {
+          fieldValid = false;
+        } else if (field.type === 'email' && field.value.trim()) {
+          fieldValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(field.value);
+        } else if (field.id && field.id.includes('cpf') && field.value.trim()) {
+          fieldValid = field.value.replace(/\D/g, '').length === 11;
+        }
+
+        if (!fieldValid) {
+          field.classList.add('error');
+          if (errorEl) errorEl.classList.add('show');
+          isValid = false;
+        } else {
+          field.classList.remove('error');
+          if (errorEl) errorEl.classList.remove('show');
+        }
+      });
+
+      return isValid;
+    }
+
+    document.querySelectorAll('.form-input, .form-select, .form-textarea').forEach(field => {
+      field.addEventListener('input', function() {
+        this.classList.remove('error');
+        const errorEl = document.getElementById('error-' + this.id);
+        if (errorEl) errorEl.classList.remove('show');
+      });
+      field.addEventListener('change', function() {
+        this.classList.remove('error');
+        const errorEl = document.getElementById('error-' + this.id);
+        if (errorEl) errorEl.classList.remove('show');
+      });
+    });
+
+    // Navigation
+    function goToStep(step) {
+      sections.forEach(s => s.classList.remove('active'));
+      document.getElementById('step' + step).classList.add('active');
+
+      steps.forEach((s, i) => {
+        s.classList.remove('active', 'completed');
+        if (i + 1 < step) s.classList.add('completed');
+        if (i + 1 === step) s.classList.add('active');
+      });
+
+      const progressPercent = ((step - 1) / (totalSteps - 1)) * 100;
+      progressLine.style.width = progressPercent + '%';
+
+      btnBack.style.display = step > 1 ? 'flex' : 'none';
+      btnNext.style.display = step < totalSteps ? 'flex' : 'none';
+      btnSubmit.style.display = step === totalSteps ? 'flex' : 'none';
+
+      currentStep = step;
+
+      if (step === totalSteps) {
+        buildSummary();
+        initSignaturePad();
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    btnNext.addEventListener('click', function() {
+      if (validateStep(currentStep)) {
+        if (currentStep < totalSteps) goToStep(currentStep + 1);
+      }
+    });
+
+    btnBack.addEventListener('click', function() {
+      if (currentStep > 1) goToStep(currentStep - 1);
+    });
+
+    steps.forEach(step => {
+      step.addEventListener('click', function() {
+        const targetStep = parseInt(this.dataset.step);
+        if (targetStep < currentStep) {
+          goToStep(targetStep);
+        } else if (targetStep === currentStep + 1) {
+          if (validateStep(currentStep)) goToStep(targetStep);
+        }
+      });
+    });
+
+    // Build summary
+    function buildSummary() {
+      const grid = document.getElementById('summaryGrid');
+      const getVal = id => {
+        const el = document.getElementById(id);
+        return el ? (el.value || el.options[el.selectedIndex]?.text || '-') : '-';
+      };
+
+      let totalFiles = 0;
+      Object.values(uploadedFiles).forEach(arr => totalFiles += arr.length);
+
+      // Collect pretender names
+      let pretenderNames = [getVal('nomePretendente')];
+      for (let i = 2; i <= pretenderCount; i++) {
+        const name = getVal('nomePretendente' + i);
+        if (name && name !== '-') pretenderNames.push(name);
+      }
+
+      grid.innerHTML = `
+        <div class="summary-block">
+          <h4><span class="dot"></span> Imóvel</h4>
+          <div class="summary-item"><span class="label">Edifício</span><span class="value">${getVal('edificio')}</span></div>
+          <div class="summary-item"><span class="label">Endereço</span><span class="value">${getVal('enderecoImovel')}, ${getVal('numeroImovel')}</span></div>
+          <div class="summary-item"><span class="label">Bairro</span><span class="value">${getVal('bairroImovel')}</span></div>
+          <div class="summary-item"><span class="label">Cidade/UF</span><span class="value">${getVal('cidadeImovel')}/${getVal('ufImovel')}</span></div>
+        </div>
+        <div class="summary-block">
+          <h4><span class="dot"></span> Pretendentes (${pretenderCount})</h4>
+          ${pretenderNames.map((name, idx) => `<div class="summary-item"><span class="label">Pretendente ${idx + 1}</span><span class="value">${name}</span></div>`).join('')}
+          <div class="summary-item"><span class="label">E-mail</span><span class="value">${getVal('emailPretendente')}</span></div>
+          <div class="summary-item"><span class="label">Telefone</span><span class="value">${getVal('celPretendente')}</span></div>
+        </div>
+        <div class="summary-block">
+          <h4><span class="dot"></span> Condições</h4>
+          <div class="summary-item"><span class="label">Aluguel</span><span class="value">R$ ${getVal('valorAluguel')}</span></div>
+          <div class="summary-item"><span class="label">Prazo</span><span class="value">${getVal('prazoLocacao')} meses</span></div>
+          <div class="summary-item"><span class="label">Pagamento</span><span class="value">${getVal('formaPagamento')}</span></div>
+          <div class="summary-item"><span class="label">Vencimento</span><span class="value">Dia ${getVal('diaVencimento') || '-'}</span></div>
+        </div>
+        <div class="summary-block">
+          <h4><span class="dot"></span> Documentos</h4>
+          <div class="summary-item"><span class="label">Total de arquivos</span><span class="value">${totalFiles} arquivo(s)</span></div>
+          <div class="summary-item"><span class="label">RG</span><span class="value">${(uploadedFiles.rg || []).length} arquivo(s)</span></div>
+          <div class="summary-item"><span class="label">CPF</span><span class="value">${(uploadedFiles.cpf || []).length} arquivo(s)</span></div>
+          <div class="summary-item"><span class="label">Renda</span><span class="value">${(uploadedFiles.renda || []).length} arquivo(s)</span></div>
+          <div class="summary-item"><span class="label">Extrato</span><span class="value">${(uploadedFiles.extrato || []).length} arquivo(s)</span></div>
+          <div class="summary-item"><span class="label">Imposto Renda</span><span class="value">${(uploadedFiles.ir || []).length} arquivo(s)</span></div>
+        </div>
+      `;
+    }
+
+    // Signature Pad
+    let signaturePad = null;
+
+    function initSignaturePad() {
+      const canvas = document.getElementById('signaturePad');
+      const ctx = canvas.getContext('2d');
+      const rect = canvas.parentElement.getBoundingClientRect();
+      canvas.width = rect.width - 4;
+      canvas.height = 200;
+
+      ctx.strokeStyle = '#1f2937';
+      ctx.lineWidth = 2;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+
+      let isDrawing = false;
+      let lastX = 0;
+      let lastY = 0;
+
+      function getPos(e) {
+        const r = canvas.getBoundingClientRect();
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        return { x: clientX - r.left, y: clientY - r.top };
+      }
+
+      function startDraw(e) {
+        e.preventDefault();
+        isDrawing = true;
+        const pos = getPos(e);
+        lastX = pos.x;
+        lastY = pos.y;
+      }
+
+      function draw(e) {
+        e.preventDefault();
+        if (!isDrawing) return;
+        const pos = getPos(e);
+        ctx.beginPath();
+        ctx.moveTo(lastX, lastY);
+        ctx.lineTo(pos.x, pos.y);
+        ctx.stroke();
+        lastX = pos.x;
+        lastY = pos.y;
+      }
+
+      function stopDraw() { isDrawing = false; }
+
+      canvas.addEventListener('mousedown', startDraw);
+      canvas.addEventListener('mousemove', draw);
+      canvas.addEventListener('mouseup', stopDraw);
+      canvas.addEventListener('mouseleave', stopDraw);
+      canvas.addEventListener('touchstart', startDraw, { passive: false });
+      canvas.addEventListener('touchmove', draw, { passive: false });
+      canvas.addEventListener('touchend', stopDraw);
+
+      document.getElementById('clearSignature').addEventListener('click', function() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      });
+
+      signaturePad = {
+        isEmpty: () => {
+          const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+          return imageData.data.every(pixel => pixel === 0);
+        },
+        toDataURL: () => canvas.toDataURL('image/png')
+      };
+    }
+
+    // File Upload
+    function setupUpload(areaId, inputId, listId, category) {
+      const area = document.getElementById(areaId);
+      const input = document.getElementById(inputId);
+      const list = document.getElementById(listId);
+
+      if (!uploadedFiles[category]) uploadedFiles[category] = [];
+
+      area.addEventListener('click', () => input.click());
+      area.addEventListener('dragover', e => { e.preventDefault(); area.classList.add('dragover'); });
+      area.addEventListener('dragleave', () => area.classList.remove('dragover'));
+      area.addEventListener('drop', e => { e.preventDefault(); area.classList.remove('dragover'); handleFiles(e.dataTransfer.files, category, list); });
+      input.addEventListener('change', () => { handleFiles(input.files, category, list); input.value = ''; });
+    }
+
+    function handleFiles(files, category, listEl) {
+      for (const file of files) {
+        if (file.size > 10 * 1024 * 1024) {
+          alert('Arquivo muito grande. Máximo: 10MB por arquivo.');
+          continue;
+        }
+        uploadedFiles[category].push(file);
+      }
+      renderFileList(category, listEl);
+    }
+
+    function getFileTypeBadge(filename) {
+      const ext = filename.split('.').pop().toLowerCase();
+      if (ext === 'pdf') return '<span class="file-type-badge file-type-badge--pdf">PDF</span>';
+      if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(ext)) return '<span class="file-type-badge file-type-badge--img">IMG</span>';
+      if (['doc', 'docx'].includes(ext)) return '<span class="file-type-badge file-type-badge--doc">DOC</span>';
+      return '<span class="file-type-badge" style="background:#f3f4f6;color:#6b7280;">' + ext.toUpperCase() + '</span>';
+    }
+
+    function renderFileList(category, listEl) {
+      listEl.innerHTML = '';
+      if (uploadedFiles[category] && uploadedFiles[category].length > 0) {
+        listEl.insertAdjacentHTML('beforeend', `<span class="file-count">${uploadedFiles[category].length} arquivo(s)</span>`);
+      }
+      uploadedFiles[category].forEach((file, index) => {
+        const item = document.createElement('div');
+        item.className = 'file-item';
+        item.innerHTML = `
+          <span class="file-name">${getFileTypeBadge(file.name)}<span>${file.name}</span></span>
+          <span class="file-size">${(file.size / 1024).toFixed(1)} KB</span>
+          <button type="button" class="remove-file" data-category="${category}" data-index="${index}">&times;</button>
+        `;
+        listEl.appendChild(item);
+      });
+      listEl.querySelectorAll('.remove-file').forEach(btn => {
+        btn.addEventListener('click', function() {
+          uploadedFiles[this.dataset.category].splice(parseInt(this.dataset.index), 1);
+          renderFileList(this.dataset.category, listEl);
+        });
+      });
+    }
+
+    setupUpload('uploadRG', 'fileRG', 'fileListRG', 'rg');
+    setupUpload('uploadCPF', 'fileCPF', 'fileListCPF', 'cpf');
+    setupUpload('uploadRenda', 'fileRenda', 'fileListRenda', 'renda');
+    setupUpload('uploadExtrato', 'fileExtrato', 'fileListExtrato', 'extrato');
+    setupUpload('uploadIR', 'fileIR', 'fileListIR', 'ir');
+    setupUpload('uploadOutros', 'fileOutros', 'fileListOutros', 'outros');
+
+    // Additional Pretenders
+    function addPretender() {
+      if (pretenderCount >= maxPretenders) return;
+      pretenderCount++;
+
+      const container = document.getElementById('additionalPretenders');
+      const block = document.createElement('div');
+      block.className = 'pretender-block';
+      block.id = 'pretenderBlock' + pretenderCount;
+
+      block.innerHTML = `
+        <div class="pretender-block-header" onclick="togglePretenderBlock(${pretenderCount})">
+          <h4>
+            <span class="pretender-badge">Pretendente ${pretenderCount}</span>
+            <span>Dados Adicionais</span>
+          </h4>
+          <span class="toggle-arrow">▼</span>
+        </div>
+        <div class="pretender-block-body">
+          <div class="form-grid">
+            <div class="form-group full-width">
+              <label class="form-label">Nome Completo <span class="required">*</span></label>
+              <input type="text" class="form-input" id="nomePretendente${pretenderCount}" name="nomePretendente${pretenderCount}" placeholder="Nome completo" required>
+              <span class="error-message" id="error-nomePretendente${pretenderCount}">Campo obrigatório</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">E-mail <span class="required">*</span></label>
+              <input type="email" class="form-input" id="emailPretendente${pretenderCount}" name="emailPretendente${pretenderCount}" placeholder="seu@email.com" required>
+              <span class="error-message" id="error-emailPretendente${pretenderCount}">E-mail inválido</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">CPF <span class="required">*</span></label>
+              <input type="text" class="form-input" id="cpfPretendente${pretenderCount}" name="cpfPretendente${pretenderCount}" placeholder="000.000.000-00" maxlength="14" required>
+              <span class="error-message" id="error-cpfPretendente${pretenderCount}">CPF inválido</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Identidade Nº <span class="required">*</span></label>
+              <input type="text" class="form-input" id="rgPretendente${pretenderCount}" name="rgPretendente${pretenderCount}" placeholder="Nº do RG" required>
+              <span class="error-message" id="error-rgPretendente${pretenderCount}">Campo obrigatório</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Emitido por</label>
+              <input type="text" class="form-input" id="emissorPretendente${pretenderCount}" name="emissorPretendente${pretenderCount}" placeholder="Ex: SSP/SP">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Data de Nascimento <span class="required">*</span></label>
+              <input type="date" class="form-input" id="nascPretendente${pretenderCount}" name="nascPretendente${pretenderCount}" required>
+              <span class="error-message" id="error-nascPretendente${pretenderCount}">Campo obrigatório</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Profissão <span class="required">*</span></label>
+              <input type="text" class="form-input" id="profissaoPretendente${pretenderCount}" name="profissaoPretendente${pretenderCount}" placeholder="Sua profissão" required>
+              <span class="error-message" id="error-profissaoPretendente${pretenderCount}">Campo obrigatório</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Naturalidade</label>
+              <input type="text" class="form-input" id="naturalidadePretendente${pretenderCount}" name="naturalidadePretendente${pretenderCount}" placeholder="Cidade de nascimento">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Estado Civil <span class="required">*</span></label>
+              <select class="form-select" id="civilPretendente${pretenderCount}" name="civilPretendente${pretenderCount}" required>
+                <option value="" disabled selected>Selecione</option>
+                <option value="solteiro">Solteiro(a)</option>
+                <option value="casado">Casado(a)</option>
+                <option value="divorciado">Divorciado(a)</option>
+                <option value="viuvo">Viúvo(a)</option>
+                <option value="separado">Separado(a)</option>
+              </select>
+              <span class="error-message" id="error-civilPretendente${pretenderCount}">Campo obrigatório</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Tel. Comercial</label>
+              <input type="tel" class="form-input" id="telComPretendente${pretenderCount}" name="telComPretendente${pretenderCount}" placeholder="(00) 0000-0000" maxlength="14">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Tel. Residencial</label>
+              <input type="tel" class="form-input" id="telResPretendente${pretenderCount}" name="telResPretendente${pretenderCount}" placeholder="(00) 0000-0000" maxlength="14">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Celular <span class="required">*</span></label>
+              <input type="tel" class="form-input" id="celPretendente${pretenderCount}" name="celPretendente${pretenderCount}" placeholder="(00) 00000-0000" maxlength="15" required>
+              <span class="error-message" id="error-celPretendente${pretenderCount}">Campo obrigatório</span>
+            </div>
+          </div>
+          <div class="section-divider">
+            <span>Endereço do Pretendente ${pretenderCount}</span>
+          </div>
+          <div class="form-grid">
+            <div class="form-group full-width">
+              <label class="form-label">Endereço <span class="required">*</span></label>
+              <input type="text" class="form-input" id="enderecoPretendente${pretenderCount}" name="enderecoPretendente${pretenderCount}" placeholder="Rua, Avenida, etc." required>
+              <span class="error-message" id="error-enderecoPretendente${pretenderCount}">Campo obrigatório</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Número <span class="required">*</span></label>
+              <input type="text" class="form-input" id="numeroPretendente${pretenderCount}" name="numeroPretendente${pretenderCount}" placeholder="Nº" required>
+              <span class="error-message" id="error-numeroPretendente${pretenderCount}">Campo obrigatório</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Bairro <span class="required">*</span></label>
+              <input type="text" class="form-input" id="bairroPretendente${pretenderCount}" name="bairroPretendente${pretenderCount}" placeholder="Bairro" required>
+              <span class="error-message" id="error-bairroPretendente${pretenderCount}">Campo obrigatório</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Cidade <span class="required">*</span></label>
+              <input type="text" class="form-input" id="cidadePretendente${pretenderCount}" name="cidadePretendente${pretenderCount}" placeholder="Cidade" required>
+              <span class="error-message" id="error-cidadePretendente${pretenderCount}">Campo obrigatório</span>
+            </div>
+            <div class="form-group">
+              <label class="form-label">U.F. <span class="required">*</span></label>
+              <select class="form-select" id="ufPretendente${pretenderCount}" name="ufPretendente${pretenderCount}" required>
+                <option value="" disabled selected>Selecione</option>
+                <option value="AC">AC</option><option value="AL">AL</option><option value="AP">AP</option>
+                <option value="AM">AM</option><option value="BA">BA</option><option value="CE">CE</option>
+                <option value="DF">DF</option><option value="ES">ES</option><option value="GO">GO</option>
+                <option value="MA">MA</option><option value="MT">MT</option><option value="MS">MS</option>
+                <option value="MG">MG</option><option value="PA">PA</option><option value="PB">PB</option>
+                <option value="PR">PR</option><option value="PE">PE</option><option value="PI">PI</option>
+                <option value="RJ">RJ</option><option value="RN">RN</option><option value="RS">RS</option>
+                <option value="RO">RO</option><option value="RR">RR</option><option value="SC">SC</option>
+                <option value="SP">SP</option><option value="SE">SE</option><option value="TO">TO</option>
+              </select>
+              <span class="error-message" id="error-ufPretendente${pretenderCount}">Campo obrigatório</span>
+            </div>
+          </div>
+        </div>
+      `;
+
+      container.appendChild(block);
+
+      // Apply masks to new fields
+      block.querySelectorAll('input[name*="cpf"]').forEach(input => {
+        input.addEventListener('input', function() { this.value = maskCPF(this.value); });
+      });
+      block.querySelectorAll('input[type="tel"]').forEach(input => {
+        input.addEventListener('input', function() { this.value = maskPhone(this.value); });
+      });
+
+      // Apply validation removal on input
+      block.querySelectorAll('.form-input, .form-select').forEach(field => {
+        field.addEventListener('input', function() {
+          this.classList.remove('error');
+          const errorEl = document.getElementById('error-' + this.id);
+          if (errorEl) errorEl.classList.remove('show');
+        });
+        field.addEventListener('change', function() {
+          this.classList.remove('error');
+          const errorEl = document.getElementById('error-' + this.id);
+          if (errorEl) errorEl.classList.remove('show');
+        });
+      });
+
+      // Auto open the new block
+      const header = block.querySelector('.pretender-block-header');
+      const body = block.querySelector('.pretender-block-body');
+      header.classList.add('open');
+      body.classList.add('open');
+
+      // Update button and counter
+      updatePretenderUI();
+
+      // Scroll to new block
+      block.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function removePretender(index) {
+      const block = document.getElementById('pretenderBlock' + index);
+      if (block) {
+        block.remove();
+        pretenderCount--;
+        updatePretenderUI();
+      }
+    }
+
+    function updatePretenderUI() {
+      const btn = document.getElementById('addPretenderBtn');
+      const counter = document.getElementById('pretenderCounter');
+
+      if (pretenderCount >= maxPretenders) {
+        btn.disabled = true;
+        btn.innerHTML = `
+          <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Limite máximo de ${maxPretenders} pretendentes atingido
+        `;
+      } else {
+        btn.disabled = false;
+        btn.innerHTML = `
+          <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Adicionar Pretendente
+        `;
+      }
+
+      const remaining = maxPretenders - pretenderCount;
+      counter.textContent = pretenderCount === 1
+        ? 'Preencha os dados do pretendente principal'
+        : `${pretenderCount} de ${maxPretenders} pretendentes preenchidos (${remaining} restante${remaining !== 1 ? 's' : ''})`;
+    }
+
+    function togglePretenderBlock(index) {
+      const block = document.getElementById('pretenderBlock' + index);
+      const header = block.querySelector('.pretender-block-header');
+      const body = block.querySelector('.pretender-block-body');
+
+      header.classList.toggle('open');
+      body.classList.toggle('open');
+    }
+
+    // Form submission
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      if (signaturePad && signaturePad.isEmpty()) {
+        alert('Por favor, assine a proposta antes de enviar.');
+        return;
+      }
+
+      if (!document.getElementById('agreeTerms').checked) {
+        document.getElementById('error-agreeTerms').classList.add('show');
+        return;
+      } else {
+        document.getElementById('error-agreeTerms').classList.remove('show');
+      }
+
+      btnSubmit.disabled = true;
+      btnSubmit.innerHTML = '<div class="spinner"></div> Enviando...';
+
+      const getVal = id => {
+        const el = document.getElementById(id);
+        return el ? el.value : '';
+      };
+
+      let totalFiles = 0;
+      Object.values(uploadedFiles).forEach(arr => totalFiles += arr.length);
+
+      // Collect all pretender data
+      let pretenderData = [];
+      for (let i = 1; i <= pretenderCount; i++) {
+        const suffix = i === 1 ? '' : i;
+        const name = getVal('nomePretendente' + (i === 1 ? '' : i));
+        if (name) {
+          pretenderData.push(`Pretendente ${i}: ${name} | CPF: ${getVal('cpfPretendente' + (i === 1 ? '' : i))} | Email: ${getVal('emailPretendente' + (i === 1 ? '' : i))}`);
+        }
+      }
+
+      const emailBody = `
+NOVA PROGRESSO - PROPOSTA DE LOCAÇÃO
+=====================================
+
+DADOS DO IMÓVEL:
+Edifício: ${getVal('edificio')}
+Endereço: ${getVal('enderecoImovel')}, Nº ${getVal('numeroImovel')}
+Bairro: ${getVal('bairroImovel')}
+Cidade: ${getVal('cidadeImovel')}/${getVal('ufImovel')}
+
+PRETENDENTES (${pretenderCount}):
+${pretenderData.join('\n')}
+
+DADOS DO PRETENDENTE PRINCIPAL:
+Nome: ${getVal('nomePretendente')}
+E-mail: ${getVal('emailPretendente')}
+CPF: ${getVal('cpfPretendente')}
+RG: ${getVal('rgPretendente')} (${getVal('emissorPretendente')})
+Nascimento: ${getVal('nascPretendente')}
+Profissão: ${getVal('profissaoPretendente')}
+Estado Civil: ${getVal('civilPretendente')}
+Tel. Com: ${getVal('telComPretendente')}
+Tel. Res: ${getVal('telResPretendente')}
+Cel: ${getVal('celPretendente')}
+Endereço: ${getVal('enderecoPretendente')}, Nº ${getVal('numeroPretendente')} - ${getVal('bairroPretendente')}
+Cidade: ${getVal('cidadePretendente')}/${getVal('ufPretendente')}
+
+${document.getElementById('hasFiador').checked ? `
+FIADOR:
+Nome: ${getVal('nomeFiador')}
+E-mail: ${getVal('emailFiador')}
+CPF: ${getVal('cpfFiador')}
+RG: ${getVal('rgFiador')} (${getVal('emissorFiador')})
+Profissão: ${getVal('profissaoFiador')}
+Tel: ${getVal('celFiador')}
+Endereço: ${getVal('enderecoFiador')}, Nº ${getVal('numeroFiador')} - ${getVal('bairroFiador')}
+Cidade: ${getVal('cidadeFiador')}/${getVal('ufFiador')}
+` : ''}
+
+CONDIÇÕES:
+Valor Aluguel: R$ ${getVal('valorAluguel')}
+Prazo: ${getVal('prazoLocacao')} meses
+Pagamento: ${getVal('formaPagamento')}
+Vencimento: Dia ${getVal('diaVencimento') || '-'}
+Observações: ${getVal('observacoes') || 'Nenhuma'}
+
+DOCUMENTOS ANEXADOS: ${totalFiles} arquivo(s)
+- RG: ${(uploadedFiles.rg || []).length} arquivo(s)
+- CPF: ${(uploadedFiles.cpf || []).length} arquivo(s)
+- Comprovante de Renda: ${(uploadedFiles.renda || []).length} arquivo(s)
+- Extrato Bancário: ${(uploadedFiles.extrato || []).length} arquivo(s)
+- Imposto de Renda: ${(uploadedFiles.ir || []).length} arquivo(s)
+- Outros: ${(uploadedFiles.outros || []).length} arquivo(s)
+
+ASSINATURA ELETRÔNICA: Incluída
+      `.trim();
+
+      setTimeout(() => {
+        const mailtoLink = `mailto:juridico@novaprogesso.com.br?subject=${encodeURIComponent('Proposta de Locação - ' + getVal('nomePretendente'))}&body=${encodeURIComponent(emailBody)}`;
+        window.open(mailtoLink, '_blank');
+        document.getElementById('successModal').classList.add('active');
+        btnSubmit.disabled = false;
+        btnSubmit.innerHTML = `<svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> Enviar Proposta`;
+      }, 1500);
+    });
+
+    // Initialize
+    goToStep(1);
+    updatePretenderUI();
+  </script>
+</body>
+</html>
+
